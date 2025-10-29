@@ -35,7 +35,7 @@ This starter repository provides a minimal skeletal structure with:
 
 Before you begin, ensure you have the following installed on your system:
 
-#### For Windows Users
+#### Windows
 
 - **Git**: Download from [https://git-scm.com/download/win](https://git-scm.com/download/win)
 - **Flutter SDK**: Download from [https://docs.flutter.dev/get-started/install/windows](https://docs.flutter.dev/get-started/install/windows)
@@ -43,11 +43,11 @@ Before you begin, ensure you have the following installed on your system:
   - Install the Flutter extension from the VS Code marketplace
 - **Google Chrome**: Required for web development
 
-#### For macOS Users
+#### macOS
 
 - **Git**: Usually pre-installed. If not, install via Homebrew: `brew install git`
 - **Flutter SDK**: Download from [https://docs.flutter.dev/get-started/install/macos](https://docs.flutter.dev/get-started/install/macos)
-- **Xcode** (for iOS development): Download from the Mac App Store
+- **Xcode** (optional, for iOS development): Download from the Mac App Store
 - **Visual Studio Code** (recommended): Download from [https://code.visualstudio.com/](https://code.visualstudio.com/)
   - Install the Flutter extension from the VS Code marketplace
 - **Google Chrome**: Required for web development
@@ -163,30 +163,13 @@ flutter test test/home_test.dart
 flutter test test/product_test.dart
 ```
 
-## Your Task
+### Assessment Criteria
 
-Your objective is to reimplement the features and functionality of the existing Union Shop website ([https://shop.upsu.net](https://shop.upsu.net)) using Flutter.
-
-### Key Requirements
-
-1. Implement the core e-commerce features visible on the existing site
-2. Ensure responsive design that works on both mobile and desktop
-3. Maintain code quality and follow Flutter best practices
-4. Write appropriate widget tests for your components
-5. Focus on user experience and design implementation
-
-### Detailed Task Description and Marking Criteria
-
-For detailed task requirements and marking criteria, please refer to the coursework document:
+In short, your objective is to reimplement the features and functionality of the existing Union Shop website ([https://shop.upsu.net](https://shop.upsu.net)) using Flutter. For detailed task requirements and marking criteria, please refer to the coursework document:
 
 **[Coursework Document](https://portdotacdotuk-my.sharepoint.com/:w:/g/personal/mani_ghahremani_port_ac_uk/EbM1UcwOHMRLmcKeI0btHqYBeZ3ADWjyN0EXBWdHLhsO_g?e=FDEQLt)**
 
-This document contains:
-
-- Complete task specifications
-- Assessment criteria
-- Submission guidelines
-- Deadlines and important dates
+This document outlines the specification for your coursework, the breakdown of marks, submission guidelines, and deadlines.
 
 ## Project Structure
 
@@ -202,22 +185,13 @@ union_shop/
 └── README.md               # This file
 ```
 
-## Useful Resources
+Note that this is the initial structure. You are of course expected to create additional files and directories as needed to complete the coursework.
 
-- [Flutter Documentation](https://docs.flutter.dev/)
-- [Flutter Widget Catalog](https://docs.flutter.dev/ui/widgets)
-- [Dart Language Tour](https://dart.dev/guides/language/language-tour)
-- [Flutter Testing Documentation](https://docs.flutter.dev/testing)
-- [Material Design Guidelines](https://m3.material.io/)
+## Support and Resources
 
-## Support
+For questions or issues related to this coursework use [the dedicated Discord channel](https://portdotacdotuk-my.sharepoint.com/:b:/g/personal/mani_ghahremani_port_ac_uk/EbX583gvURRAhqsnhYqmbSEBwIFw6tXRyz_Br1GxIyE8dg). Please first check the existing posts in the forum to see if your question has already been answered before posting a new question.
 
-For questions or issues related to this coursework:
-
-1. Check the coursework document for detailed requirements
-2. Refer to the Flutter documentation
-3. Contact your module instructor during office hours
-4. Use the module's discussion forum
+Use the worksheets listed on [the homepage](https://manighahrmani.github.io/sandwich_shop/) as your primary learning resource for Flutter development. You must refrain from using other online resources such as Stack Overflow, YouTube tutorials, or other websites for this coursework as they may contain outdated or incorrect information.
 
 ## License
 
