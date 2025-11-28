@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
+import 'package:union_shop/models/product.dart';
+import 'package:union_shop/data/products.dart';
+import 'package:union_shop/search/product_search.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -108,7 +111,17 @@ class HomeScreen extends StatelessWidget {
                                     minWidth: 32,
                                     minHeight: 32,
                                   ),
-                                  onPressed: placeholderCallbackForButtons,
+                                  onPressed: () async {
+                                    final Product? selected =
+                                        await showSearch<Product?>(
+                                      context: context,
+                                      delegate: ProductSearchDelegate(products),
+                                    );
+                                    if (selected != null) {
+                                      Navigator.pushNamed(context, '/product',
+                                          arguments: selected);
+                                    }
+                                  },
                                 ),
                                 IconButton(
                                   icon: const Icon(
@@ -252,36 +265,18 @@ class HomeScreen extends StatelessWidget {
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                      crossAxisCount: MediaQuery.of(context).size.width > 900
+                          ? 3
+                          : (MediaQuery.of(context).size.width > 600 ? 2 : 1),
                       crossAxisSpacing: 24,
                       mainAxisSpacing: 48,
-                      children: const [
-                        ProductCard(
-                          title: 'Placeholder Product 1',
-                          price: '£10.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 2',
-                          price: '£15.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 3',
-                          price: '£20.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                        ProductCard(
-                          title: 'Placeholder Product 4',
-                          price: '£25.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        ),
-                      ],
+                      children: products
+                          .map((p) => ProductCard(
+                                title: p.title,
+                                price: p.price,
+                                imageUrl: p.imageUrl,
+                              ))
+                          .toList(),
                     ),
                   ],
                 ),

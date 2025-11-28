@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/models/product.dart';
+import 'package:union_shop/data/products.dart';
+import 'package:union_shop/search/product_search.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
@@ -78,7 +81,17 @@ class ProductPage extends StatelessWidget {
                                     minWidth: 32,
                                     minHeight: 32,
                                   ),
-                                  onPressed: placeholderCallbackForButtons,
+                                  onPressed: () async {
+                                    final Product? selected =
+                                        await showSearch<Product?>(
+                                      context: (context),
+                                      delegate: ProductSearchDelegate(products),
+                                    );
+                                    if (selected != null) {
+                                      Navigator.pushNamed(context, '/product',
+                                          arguments: selected);
+                                    }
+                                  },
                                 ),
                                 IconButton(
                                   icon: const Icon(
@@ -147,58 +160,75 @@ class ProductPage extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.image_not_supported,
-                                    size: 64,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'Image unavailable',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ],
+                      child: Builder(builder: (context) {
+                        final product = ModalRoute.of(context)
+                            ?.settings
+                            .arguments as Product?;
+                        final imageUrl = product?.imageUrl ??
+                            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282';
+                        return Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.image_not_supported,
+                                      size: 64,
+                                      color: Colors.grey,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'Image unavailable',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        );
+                      }),
                     ),
                   ),
 
                   const SizedBox(height: 24),
 
                   // Product name
-                  const Text(
-                    'Placeholder Product Name',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+                  Builder(builder: (context) {
+                    final product =
+                        ModalRoute.of(context)?.settings.arguments as Product?;
+                    final title = product?.title ?? 'Placeholder Product Name';
+                    return Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    );
+                  }),
 
                   const SizedBox(height: 12),
 
                   // Product price
-                  const Text(
-                    '£15.00',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4d2963),
-                    ),
-                  ),
+                  Builder(builder: (context) {
+                    final product =
+                        ModalRoute.of(context)?.settings.arguments as Product?;
+                    final price = product?.price ?? '£15.00';
+                    return Text(
+                      price,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4d2963),
+                      ),
+                    );
+                  }),
 
                   const SizedBox(height: 24),
 
@@ -212,14 +242,21 @@ class ProductPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'This is a placeholder description for the product. Students should replace this with real product information and implement proper data management.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                      height: 1.5,
-                    ),
-                  ),
+                  Builder(builder: (context) {
+                    final product =
+                        ModalRoute.of(context)?.settings.arguments as Product?;
+                    final desc = product == null
+                        ? 'This is a placeholder description for the product. Students should replace this with real product information and implement proper data management.'
+                        : '';
+                    return Text(
+                      desc,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                        height: 1.5,
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),
