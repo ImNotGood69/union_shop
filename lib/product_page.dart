@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/search/product_search.dart';
+import 'package:union_shop/widgets/about_button.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
@@ -106,6 +107,7 @@ class ProductPage extends StatelessWidget {
                                   ),
                                   onPressed: placeholderCallbackForButtons,
                                 ),
+                                const AboutButton(),
                                 IconButton(
                                   icon: const Icon(
                                     Icons.shopping_bag_outlined,
