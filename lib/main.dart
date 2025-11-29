@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/about/about_page.dart';
@@ -47,6 +48,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _page = 0;
+  Timer? _carouselTimer;
 
   void placeholderCallbackForButtons() {}
 
@@ -57,10 +59,22 @@ class _HomeScreenState extends State<HomeScreen> {
       final p = _pageController.page?.round() ?? 0;
       if (p != _page) setState(() => _page = p);
     });
+    // start automatic carousel timer (5 seconds)
+    _carouselTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+      if (!mounted || !_pageController.hasClients) return;
+      final current = _pageController.page?.round() ?? _page;
+      final next = (current + 1) % 2; // two slides
+      _pageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   @override
   void dispose() {
+    _carouselTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
