@@ -273,6 +273,78 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                     ),
                   ),
+                  // Left / Right arrow buttons (moved here so Positioned is inside the Stack)
+                  Positioned(
+                    left: 8,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: Semantics(
+                        label: 'Previous slide',
+                        button: true,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              if (!_pageController.hasClients) return;
+                              final current =
+                                  _pageController.page?.round() ?? _page;
+                              final prev = (current - 1 + 2) % 2;
+                              _pageController.animateToPage(prev,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut);
+                            },
+                            customBorder: const CircleBorder(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.35),
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: const Icon(Icons.arrow_back_ios,
+                                  color: Colors.white, size: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    right: 8,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: Semantics(
+                        label: 'Next slide',
+                        button: true,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              if (!_pageController.hasClients) return;
+                              final current =
+                                  _pageController.page?.round() ?? _page;
+                              final next = (current + 1) % 2;
+                              _pageController.animateToPage(next,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut);
+                            },
+                            customBorder: const CircleBorder(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.35),
+                                shape: BoxShape.circle,
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: const Icon(Icons.arrow_forward_ios,
+                                  color: Colors.white, size: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
