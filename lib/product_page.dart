@@ -210,17 +210,17 @@ class ProductPage extends StatelessWidget {
                 );
 
                 if (isNarrow) {
-                  return Column(
+                  return const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       hours,
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       contact,
                     ],
                   );
                 }
 
-                return Row(
+                return const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
