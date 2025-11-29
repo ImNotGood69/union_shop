@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/about/about_page.dart';
 import 'package:union_shop/contact/contact_page.dart';
+import 'package:union_shop/collections/collections_page.dart';
+import 'package:union_shop/collections/collection_detail.dart';
 import 'package:union_shop/widgets/about_button.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
@@ -28,16 +30,39 @@ class UnionShopApp extends StatelessWidget {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
         '/contact': (context) => const ContactPage(),
+        '/collections': (context) => const CollectionsPage(),
+        '/collections/detail': (context) => const CollectionDetailPage(),
       },
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  void placeholderCallbackForButtons() {
-    // event handler for buttons that don't do anything yet
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final PageController _pageController = PageController();
+  int _page = 0;
+
+  void placeholderCallbackForButtons() {}
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      final p = _pageController.page?.round() ?? 0;
+      if (p != _page) setState(() => _page = p);
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -55,7 +80,6 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Row(
                 children: [
-                  // logo / home
                   GestureDetector(
                     onTap: () => Navigator.pushNamedAndRemoveUntil(
                         context, '/', (r) => false),
@@ -118,69 +142,121 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Hero Section
+            // Carousel Hero Section
             SizedBox(
               height: 400,
               width: double.infinity,
               child: Stack(
                 children: [
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        color: Colors.black.withOpacity(0.55),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 24,
-                    right: 24,
-                    top: 80,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Placeholder Hero Title',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          "This is placeholder text for the hero section.",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            height: 1.5,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 32),
-                        ElevatedButton(
-                          onPressed: placeholderCallbackForButtons,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: brandPurple,
-                            foregroundColor: Colors.white,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
+                  PageView(
+                    controller: _pageController,
+                    children: [
+                      // Slide 1
+                      Stack(children: [
+                        Positioned.fill(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'BROWSE PRODUCTS',
-                            style: TextStyle(fontSize: 14, letterSpacing: 1),
+                            child: Container(
+                                color: Colors.black.withOpacity(0.55)),
                           ),
                         ),
-                      ],
+                        Positioned(
+                            left: 24,
+                            right: 24,
+                            top: 80,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text('Placeholder Hero Title',
+                                    style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2)),
+                                const SizedBox(height: 16),
+                                const Text(
+                                    "This is placeholder text for the hero section.",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        height: 1.5),
+                                    textAlign: TextAlign.center),
+                                const SizedBox(height: 32),
+                                ElevatedButton(
+                                  onPressed: placeholderCallbackForButtons,
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: brandPurple,
+                                      foregroundColor: Colors.white,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero)),
+                                  child: const Text('BROWSE PRODUCTS',
+                                      style: TextStyle(
+                                          fontSize: 14, letterSpacing: 1)),
+                                ),
+                              ],
+                            )),
+                      ]),
+
+                      // Slide 2: collections promo
+                      Stack(children: [
+                        Positioned.fill(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Container(
+                                color: Colors.black.withOpacity(0.45)),
+                          ),
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/collections'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: brandPurple,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 14)),
+                            child: const Text('VIEW COLLECTIONS',
+                                style:
+                                    TextStyle(fontSize: 16, letterSpacing: 1)),
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ),
+
+                  // Dots indicator
+                  Positioned(
+                    bottom: 12,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                          2,
+                          (i) => Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                width: _page == i ? 12 : 8,
+                                height: _page == i ? 12 : 8,
+                                decoration: BoxDecoration(
+                                    color: _page == i
+                                        ? brandPurple
+                                        : Colors.white70,
+                                    shape: BoxShape.circle),
+                              )),
                     ),
                   ),
                 ],

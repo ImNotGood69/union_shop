@@ -7,3 +7,7 @@ prompt for footer
 please give me a footer that displays opening hours (make these just monday to friday 9am to 5pm) and a contact us page that uses the email: fakeemail@email.com
 and a phone number that is :
 076942099019
+
+prompt for collections and carousel 
+
+in the area where the large image with the button is. please turn it into a carousel, please add the button on the next slide that says "view collections", subsequently, create a page that would show collections of certain themes. these themes being autumn favourites, black friday. these clickable widgets should also include image tags. which i will populate later
