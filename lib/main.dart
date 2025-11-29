@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/about/about_page.dart';
+import 'package:union_shop/contact/contact_page.dart';
 import 'package:union_shop/widgets/about_button.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
@@ -29,6 +30,7 @@ class UnionShopApp extends StatelessWidget {
       routes: {
         '/product': (context) => const ProductPage(),
         '/about': (context) => const AboutPage(),
+        '/contact': (context) => const ContactPage(),
       },
     );
   }
@@ -293,14 +295,27 @@ class HomeScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               color: Colors.grey[50],
-              padding: const EdgeInsets.all(24),
-              child: const Text(
-                'Placeholder Footer',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Opening Hours',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(height: 4),
+                      Text('Mon - Fri: 09:00 - 17:00'),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, '/contact'),
+                    child: const Text('Contact Us'),
+                  ),
+                ],
               ),
             ),
           ],

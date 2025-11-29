@@ -267,14 +267,27 @@ class ProductPage extends StatelessWidget {
             Container(
               width: double.infinity,
               color: Colors.grey[50],
-              padding: const EdgeInsets.all(24),
-              child: const Text(
-                'Placeholder Footer',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Opening Hours',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(height: 4),
+                      Text('Mon - Fri: 09:00 - 17:00'),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, '/contact'),
+                    child: const Text('Contact Us'),
+                  ),
+                ],
               ),
             ),
           ],
