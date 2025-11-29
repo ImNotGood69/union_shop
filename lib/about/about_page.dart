@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
+  static const Color _brandPurple = Color(0xFF4d2963);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About Us'),
-        backgroundColor: const Color(0xFF4d2963),
+        title: const Text('About Us', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+        backgroundColor: _brandPurple,
       ),
+      backgroundColor: Colors.white, // page background is white again
       body: const Padding(
-        padding: EdgeInsets.all(16.0), // <- outer padding added
+        padding: EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20),
           child: Column(
@@ -20,37 +23,50 @@ class AboutPage extends StatelessWidget {
               SizedBox(height: 8),
               Text(
                 'About Us',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 0, 0), // only this title is black
+                ),
               ),
               SizedBox(height: 16),
               Text(
                 'Welcome to the Union Shop!',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color:
+                      Color.fromARGB(255, 149, 144, 151), // other text uses brand purple (not black)
+                ),
               ),
               SizedBox(height: 12),
               Text(
                 "We're dedicated to giving you the very best University branded products, with a range of clothing and merchandise available to shop all year round! We even offer an exclusive personalisation service!",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 149, 144,151)),
               ),
               SizedBox(height: 12),
               Text(
                 'All online purchases are available for delivery or instore collection!',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 149, 144, 151)),
               ),
               SizedBox(height: 12),
               Text(
                 'We hope you enjoy our products as much as we enjoy offering them to you. If you have any questions or comments, please don\'t hesitate to contact us at hello@upsu.net.',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 149, 144, 151)),
               ),
               SizedBox(height: 12),
               Text(
                 'Happy shopping!',
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 149, 144, 151)),
               ),
               SizedBox(height: 20),
               Text(
                 'The Union Shop & Reception Team',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 149, 144, 151),
+                ),
               ),
               SizedBox(height: 16),
             ],
