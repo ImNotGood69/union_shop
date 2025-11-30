@@ -19,14 +19,61 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         args?['image'] ?? 'https://via.placeholder.com/800x400?text=Collection';
 
     // placeholder product list for this collection
-    final products = List.generate(
-        6,
-        (i) => {
-              'title': 'Placeholder Product ${i + 1}',
-              'price': '£${(10 + i * 5).toStringAsFixed(2)}',
-              'image':
-                  'https://via.placeholder.com/400x300?text=Product+${i + 1}'
-            });
+    late final List<Map<String, String>> products;
+
+    if (title == 'Black Friday') {
+      // populate Black Friday with the requested product names and both
+      // discounted and original prices (original shown struck-through)
+      products = [
+        {
+          'title': 'Portsmouth University 2025 Hoodie',
+          'price': '£25.00', // discounted
+          'originalPrice': '£45.00',
+          'image': 'https://via.placeholder.com/400x300?text=Hoodie'
+        },
+        {
+          'title': 'Neutral Classic Sweatshirt',
+          'price': '£20.00',
+          'originalPrice': '£35.00',
+          'image': 'https://via.placeholder.com/400x300?text=Sweatshirt'
+        },
+        // remaining placeholders
+        {
+          'title': 'Placeholder Product 3',
+          'price': '£15.00',
+          'originalPrice': '£15.00',
+          'image': 'https://via.placeholder.com/400x300?text=Product+3'
+        },
+        {
+          'title': 'Placeholder Product 4',
+          'price': '£18.00',
+          'originalPrice': '£18.00',
+          'image': 'https://via.placeholder.com/400x300?text=Product+4'
+        },
+        {
+          'title': 'Placeholder Product 5',
+          'price': '£12.00',
+          'originalPrice': '£12.00',
+          'image': 'https://via.placeholder.com/400x300?text=Product+5'
+        },
+        {
+          'title': 'Placeholder Product 6',
+          'price': '£22.00',
+          'originalPrice': '£22.00',
+          'image': 'https://via.placeholder.com/400x300?text=Product+6'
+        },
+      ];
+    } else {
+      products = List.generate(
+          6,
+          (i) => {
+                'title': 'Placeholder Product ${i + 1}',
+                'price': '£${(10 + i * 5).toStringAsFixed(2)}',
+                'originalPrice': '£${(10 + i * 5).toStringAsFixed(2)}',
+                'image':
+                    'https://via.placeholder.com/400x300?text=Product+${i + 1}'
+              });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -125,9 +172,24 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(p['price']!,
-                              style: const TextStyle(
-                                  fontSize: 13, color: Colors.grey)),
+                          child: Row(
+                            children: [
+                              Text(p['price'] ?? '',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF4d2963))),
+                              const SizedBox(width: 8),
+                              if ((p['originalPrice'] ?? '') !=
+                                  (p['price'] ?? ''))
+                                Text(p['originalPrice'] ?? '',
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                        decoration:
+                                            TextDecoration.lineThrough)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
