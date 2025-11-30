@@ -1,25 +1,53 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/search/product_search.dart';
 import 'package:union_shop/widgets/about_button.dart';
+import 'package:flutter/services.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
 
-  void placeholderCallbackForButtons() {
-    // event handler for buttons that don't do anything yet
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  String _selectedSize = 'M';
+  int _quantity = 1;
+  late TextEditingController _qtyController;
+
+  void _setSize(String s) => setState(() => _selectedSize = s);
+  void _setQuantity(int q) => setState(() => _quantity = q);
+
+  @override
+  void initState() {
+    super.initState();
+    _qtyController = TextEditingController(text: '$_quantity');
   }
+
+  @override
+  void dispose() {
+    _qtyController.dispose();
+    super.dispose();
+  }
+
+  void placeholderCallbackForButtons() {}
 
   @override
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)?.settings.arguments as Product?;
+    const brandPurple = Color(0xFF4d2963);
+
+    final sizes = ['S', 'M', 'L', 'XL'];
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header
+            // Header (unchanged)
             Container(
               width: double.infinity,
               color: Colors.white,
@@ -89,90 +117,248 @@ class ProductPage extends StatelessWidget {
               ),
             ),
 
-            // Product details
+            // Product details area - responsive two-column on wide screens
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Product image
-                  Container(
-                    height: 300,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[200],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        product?.imageUrl ??
-                            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.image_not_supported,
-                                      size: 64, color: Colors.grey),
-                                  SizedBox(height: 8),
-                                  Text('Image unavailable',
-                                      style: TextStyle(color: Colors.grey)),
+              child: LayoutBuilder(builder: (context, constraints) {
+                final isWide = constraints.maxWidth > 800;
+
+                final rightControls = ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Size selector
+                      const Text('Size',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: sizes
+                            .map((s) => ChoiceChip(
+                                  label: Text(s),
+                                  selected: _selectedSize == s,
+                                  onSelected: (_) => _setSize(s),
+                                  selectedColor: brandPurple,
+                                  backgroundColor: Colors.grey[200],
+                                  labelStyle: TextStyle(
+                                      color: _selectedSize == s
+                                          ? Colors.white
+                                          : Colors.black),
+                                ))
+                            .toList(),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Quantity input with dropdown (both synced)
+                      const Text('Quantity',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          // Free-form numeric input
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: Colors.grey.shade300),
+                                color: Colors.grey[50],
+                              ),
+                              child: TextField(
+                                controller: _qtyController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
                                 ],
+                                decoration: const InputDecoration(
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                                onChanged: (s) {
+                                  final v = int.tryParse(s);
+                                  setState(() {
+                                    _quantity = v ?? 0;
+                                  });
+                                },
                               ),
                             ),
-                          );
-                        },
+                          ),
+                          const SizedBox(width: 12),
+                          // Dropdown list still available
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 6),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: Colors.grey.shade300),
+                              color: Colors.white,
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<int>(
+                                value: (_quantity >= 1 && _quantity <= 10)
+                                    ? _quantity
+                                    : null,
+                                hint: const Text('1-10'),
+                                items: List.generate(
+                                    10,
+                                    (i) => DropdownMenuItem(
+                                          value: i + 1,
+                                          child: Text('${i + 1}'),
+                                        )),
+                                onChanged: (v) {
+                                  if (v == null) return;
+                                  setState(() {
+                                    _quantity = v;
+                                    _qtyController.text = '$_quantity';
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Purchase button (non functional)
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: brandPurple,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 18),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6)),
+                        ),
+                        child: const Text('Add to cart',
+                            style: TextStyle(fontSize: 16)),
+                      ),
+
+                      const SizedBox(height: 12),
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: brandPurple,
+                          side:
+                              BorderSide(color: brandPurple.withOpacity(0.15)),
+                        ),
+                        child: const Text('Buy now'),
+                      ),
+                    ],
+                  ),
+                );
+
+                final imageCard = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 240,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey[200],
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 6)),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          product?.imageUrl ??
+                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.image_not_supported,
+                                        size: 64, color: Colors.grey),
+                                    SizedBox(height: 8),
+                                    Text('Image unavailable',
+                                        style: TextStyle(color: Colors.grey)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 18),
 
-                  // Product name
-                  Text(
-                    product?.title ?? 'Placeholder Product Name',
-                    style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
+                    // Name / Price / Description
+                    Text(
+                      product?.title ?? 'Placeholder Product Name',
+                      style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      product?.price ?? '£15.00',
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF4d2963)),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Description',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      product == null
+                          ? 'This is a placeholder description for the product. Replace with real product information.'
+                          : '',
+                      style: const TextStyle(
+                          fontSize: 16, color: Colors.grey, height: 1.5),
+                    ),
+                  ],
+                );
 
-                  const SizedBox(height: 12),
+                if (isWide) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Image on the left (smaller)
+                      Flexible(flex: 1, child: imageCard),
+                      const SizedBox(width: 24),
+                      // Controls on the right (larger)
+                      Flexible(flex: 4, child: rightControls),
+                    ],
+                  );
+                }
 
-                  // Product price
-                  Text(
-                    product?.price ?? '£15.00',
-                    style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF4d2963)),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Product description
-                  const Text(
-                    'Description',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    product == null
-                        ? 'This is a placeholder description for the product. Replace with real product information.'
-                        : '',
-                    style: const TextStyle(
-                        fontSize: 16, color: Colors.grey, height: 1.5),
-                  ),
-                ],
-              ),
+                // Narrow layout: stack image then controls
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    imageCard,
+                    const SizedBox(height: 20),
+                    rightControls,
+                  ],
+                );
+              }),
             ),
 
             // Footer (Opening hours + Contact details)
@@ -184,7 +370,7 @@ class ProductPage extends StatelessWidget {
                 final isNarrow = constraints.maxWidth < 600;
                 const hours = Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Opening Hours',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
@@ -199,7 +385,7 @@ class ProductPage extends StatelessWidget {
 
                 const contact = Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Contact Us',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),

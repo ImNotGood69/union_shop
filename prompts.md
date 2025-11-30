@@ -16,3 +16,6 @@ prompt for arrows on carousel:
 
 please add arrow shaped buttons to the left and right of the carousel so that you can click and go to the other part of the carousel
 
+product page prompt to start off design,
+
+in my app, i want to have widgets that would mimic a real store, please implement the image of the product. (currently whatever the product is, this will be changed later). i need to the left of the images a way to select different sizes (s, m, l, xl,) and a quanitity list, aswell as a rectangular purchase button, which doesnt have to work. please maintin the theme of the current website. ensuring that the look is modern.
