@@ -15,15 +15,19 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, String>?;
-    final title = args?['title'] ?? 'Collection';
+    String title = args?['title'] ?? 'Collection';
+    if (title == 'Black Friday') {
+      // rename legacy route titles to the new label
+      title = 'On sale!';
+    }
     final image =
         args?['image'] ?? 'https://via.placeholder.com/800x400?text=Collection';
 
     // placeholder product list for this collection
     late final List<Map<String, String>> products;
 
-    if (title == 'Black Friday') {
-      // populate Black Friday with the requested product names and both
+    if (title == 'Black Friday' || title == 'On sale!') {
+      // populate On sale! with the requested product names and both
       // discounted and original prices (original shown struck-through)
       products = [
         {
@@ -107,6 +111,28 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
+
+            // promotional message for On sale!
+            if (title == 'Black Friday' || title == 'On sale!')
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF4d2963),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'On Sale! Limited-time deals across campus merch — up to 50% off selected items. Grab your favourites while stocks last!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
 
             // dummy filter dropdown (non-functional)
             Padding(
