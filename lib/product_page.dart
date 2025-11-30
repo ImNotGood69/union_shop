@@ -20,7 +20,7 @@ class _ProductPageState extends State<ProductPage> {
   late TextEditingController _qtyController;
 
   void _setSize(String s) => setState(() => _selectedSize = s);
-  void _setQuantity(int q) => setState(() => _quantity = q);
+  // quantity is set directly via setState in handlers; helper removed
 
   @override
   void initState() {

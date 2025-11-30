@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class CollectionDetailPage extends StatefulWidget {
   const CollectionDetailPage({super.key});
@@ -80,114 +81,142 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         title: Text(title),
         backgroundColor: const Color(0xFF4d2963),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // collection image
-          SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: Image.network(
-              image,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // collection image
+            SizedBox(
+              height: 200,
               width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  Container(color: Colors.grey[300]),
+              child: Image.network(
+                image,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) =>
+                    Container(color: Colors.grey[300]),
+              ),
             ),
-          ),
 
-          // title
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // title
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
 
-          // dummy filter dropdown (non-functional)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Filter by:',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                DropdownButton<String>(
-                  value: _selectedFilter,
-                  items: const [
-                    DropdownMenuItem(value: 'All', child: Text('All')),
-                    DropdownMenuItem(
-                        value: 'Price: Low to High',
-                        child: Text('Price: Low to High')),
-                    DropdownMenuItem(
-                        value: 'Price: High to Low',
-                        child: Text('Price: High to Low')),
-                    DropdownMenuItem(value: 'Newest', child: Text('Newest')),
-                  ],
-                  onChanged: (v) {
-                    // dummy - does not change product list logic
-                    setState(() => _selectedFilter = v ?? 'All');
-                  },
-                ),
-              ],
+            // dummy filter dropdown (non-functional)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Filter by:',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  DropdownButton<String>(
+                    value: _selectedFilter,
+                    items: const [
+                      DropdownMenuItem(value: 'All', child: Text('All')),
+                      DropdownMenuItem(
+                          value: 'Price: Low to High',
+                          child: Text('Price: Low to High')),
+                      DropdownMenuItem(
+                          value: 'Price: High to Low',
+                          child: Text('Price: High to Low')),
+                      DropdownMenuItem(value: 'Newest', child: Text('Newest')),
+                    ],
+                    onChanged: (v) {
+                      setState(() => _selectedFilter = v ?? 'All');
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 8),
+            const SizedBox(height: 16),
 
-          // products grid
-          Expanded(
-            child: Padding(
+            // products grid - scroll-friendly, no tile overflow
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.count(
-                crossAxisCount: MediaQuery.of(context).size.width > 900
-                    ? 3
-                    : (MediaQuery.of(context).size.width > 600 ? 2 : 1),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 3 / 4,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: MediaQuery.of(context).size.width > 1000
+                    ? 4
+                    : (MediaQuery.of(context).size.width > 800
+                        ? 3
+                        : (MediaQuery.of(context).size.width > 600 ? 2 : 1)),
+                crossAxisSpacing: 24,
+                mainAxisSpacing: 24,
+                // slightly taller cells to accommodate price lines
+                childAspectRatio: 0.75,
                 children: products.map((p) {
+                  final isDiscounted =
+                      (p['originalPrice'] ?? '') != (p['price'] ?? '');
                   return Card(
                     clipBehavior: Clip.hardEdge,
+                    elevation: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
-                          height: 120,
-                          width: double.infinity,
+                        AspectRatio(
+                          aspectRatio: 1,
                           child: Image.network(
                             p['image']!,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
-                                Container(color: Colors.grey[300]),
+                                Container(
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: Icon(Icons.image_not_supported,
+                                    color: Colors.grey),
+                              ),
+                            ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(p['title']!,
-                              style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w600)),
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                          child: Text(
+                            p['title']!,
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(p['price'] ?? '',
+                              Text(
+                                p['price'] ?? '',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: isDiscounted
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                  color: isDiscounted
+                                      ? const Color(0xFF4d2963)
+                                      : Colors.grey[800],
+                                ),
+                              ),
+                              if (isDiscounted) ...[
+                                const SizedBox(width: 8),
+                                Text(
+                                  p['originalPrice'] ?? '',
                                   style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF4d2963))),
-                              const SizedBox(width: 8),
-                              if ((p['originalPrice'] ?? '') !=
-                                  (p['price'] ?? ''))
-                                Text(p['originalPrice'] ?? '',
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                        decoration:
-                                            TextDecoration.lineThrough)),
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ),
@@ -197,8 +226,9 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                 }).toList(),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }
