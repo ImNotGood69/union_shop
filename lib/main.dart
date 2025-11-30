@@ -9,6 +9,7 @@ import 'package:union_shop/widgets/about_button.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/search/product_search.dart';
+import 'package:union_shop/auth/sign_in_page.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -33,6 +34,7 @@ class UnionShopApp extends StatelessWidget {
         '/contact': (context) => const ContactPage(),
         '/collections': (context) => const CollectionsPage(),
         '/collections/detail': (context) => const CollectionDetailPage(),
+        '/signin': (context) => const SignInPage(),
       },
     );
   }
@@ -133,10 +135,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                           },
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.person_outline,
-                              size: 20, color: Colors.grey),
-                          onPressed: placeholderCallbackForButtons,
+                        TextButton(
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/signin'),
+                          child: const Text(
+                            'Sign In',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
                         const AboutButton(),
                         IconButton(
