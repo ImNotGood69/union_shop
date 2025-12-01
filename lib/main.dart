@@ -5,10 +5,8 @@ import 'package:union_shop/about/about_page.dart';
 import 'package:union_shop/contact/contact_page.dart';
 import 'package:union_shop/collections/collections_page.dart';
 import 'package:union_shop/collections/collection_detail.dart';
-import 'package:union_shop/widgets/about_button.dart';
-import 'package:union_shop/models/product.dart';
+import 'package:union_shop/widgets/header_bar.dart';
 import 'package:union_shop/data/products.dart';
-import 'package:union_shop/search/product_search.dart';
 import 'package:union_shop/auth/sign_in_page.dart';
 
 void main() {
@@ -52,8 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
   int _page = 0;
   Timer? _carouselTimer;
 
-  void placeholderCallbackForButtons() {}
-
   @override
   void initState() {
     super.initState();
@@ -61,11 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
       final p = _pageController.page?.round() ?? 0;
       if (p != _page) setState(() => _page = p);
     });
-    // start automatic carousel timer (5 seconds)
     _carouselTimer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (!mounted || !_pageController.hasClients) return;
       final current = _pageController.page?.round() ?? _page;
-      final next = (current + 1) % 2; // two slides
+      final next = (current + 1) % 2;
       _pageController.animateToPage(
         next,
         duration: const Duration(milliseconds: 400),
@@ -84,82 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     const brandPurple = Color(0xFF4d2963);
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header
-            Container(
-              width: double.infinity,
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pushNamedAndRemoveUntil(
-                        context, '/', (r) => false),
-                    child: Image.network(
-                      'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
-                      height: 40,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[300],
-                          width: 40,
-                          height: 40,
-                          child: const Icon(Icons.image_not_supported,
-                              color: Colors.grey),
-                        );
-                      },
-                    ),
-                  ),
-                  const Spacer(),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.search,
-                              size: 20, color: Colors.grey),
-                          onPressed: () async {
-                            final Product? selected =
-                                await showSearch<Product?>(
-                              context: context,
-                              delegate: ProductSearchDelegate(products),
-                            );
-                            if (selected != null) {
-                              Navigator.pushNamed(context, '/product',
-                                  arguments: selected);
-                            }
-                          },
-                        ),
-                        TextButton(
-                          onPressed: () =>
-                              Navigator.pushNamed(context, '/signin'),
-                          child: const Text(
-                            'Sign In',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        const AboutButton(),
-                        IconButton(
-                          icon: const Icon(Icons.shopping_bag_outlined,
-                              size: 20, color: Colors.grey),
-                          onPressed: placeholderCallbackForButtons,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.menu,
-                              size: 20, color: Colors.grey),
-                          onPressed: placeholderCallbackForButtons,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const HeaderBar(),
 
             // Carousel Hero Section
             SizedBox(
@@ -186,39 +110,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.black.withOpacity(0.55)),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                             left: 24,
                             right: 24,
                             top: 80,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Text('Placeholder Hero Title',
+                                Text('Placeholder Hero Title',
                                     style: TextStyle(
                                         fontSize: 32,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                         height: 1.2)),
-                                const SizedBox(height: 16),
-                                const Text(
-                                    "This is placeholder text for the hero section.",
+                                SizedBox(height: 16),
+                                Text(
+                                    'This is placeholder text for the hero section.',
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,
                                         height: 1.5),
                                     textAlign: TextAlign.center),
-                                const SizedBox(height: 32),
-                                ElevatedButton(
-                                  onPressed: placeholderCallbackForButtons,
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: brandPurple,
-                                      foregroundColor: Colors.white,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.zero)),
-                                  child: const Text('BROWSE PRODUCTS',
-                                      style: TextStyle(
-                                          fontSize: 14, letterSpacing: 1)),
-                                ),
+                                SizedBox(height: 32),
                               ],
                             )),
                       ]),
@@ -278,37 +191,34 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                     ),
                   ),
-                  // Left / Right arrow buttons (moved here so Positioned is inside the Stack)
+
+                  // Left / Right arrow buttons
                   Positioned(
                     left: 8,
                     top: 0,
                     bottom: 0,
                     child: Center(
-                      child: Semantics(
-                        label: 'Previous slide',
-                        button: true,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              if (!_pageController.hasClients) return;
-                              final current =
-                                  _pageController.page?.round() ?? _page;
-                              final prev = (current - 1 + 2) % 2;
-                              _pageController.animateToPage(prev,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut);
-                            },
-                            customBorder: const CircleBorder(),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.35),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(Icons.arrow_back_ios,
-                                  color: Colors.white, size: 16),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            if (!_pageController.hasClients) return;
+                            final current =
+                                _pageController.page?.round() ?? _page;
+                            final prev = (current - 1 + 2) % 2;
+                            _pageController.animateToPage(prev,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut);
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.35),
+                              shape: BoxShape.circle,
                             ),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(Icons.arrow_back_ios,
+                                color: Colors.white, size: 16),
                           ),
                         ),
                       ),
@@ -320,31 +230,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     top: 0,
                     bottom: 0,
                     child: Center(
-                      child: Semantics(
-                        label: 'Next slide',
-                        button: true,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              if (!_pageController.hasClients) return;
-                              final current =
-                                  _pageController.page?.round() ?? _page;
-                              final next = (current + 1) % 2;
-                              _pageController.animateToPage(next,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut);
-                            },
-                            customBorder: const CircleBorder(),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.35),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(Icons.arrow_forward_ios,
-                                  color: Colors.white, size: 16),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            if (!_pageController.hasClients) return;
+                            final current =
+                                _pageController.page?.round() ?? _page;
+                            final next = (current + 1) % 2;
+                            _pageController.animateToPage(next,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut);
+                          },
+                          customBorder: const CircleBorder(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.35),
+                              shape: BoxShape.circle,
                             ),
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(Icons.arrow_forward_ios,
+                                color: Colors.white, size: 16),
                           ),
                         ),
                       ),
@@ -396,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Footer (Opening hours + Contact details)
+            // Footer
             Container(
               width: double.infinity,
               color: Colors.grey[50],
@@ -405,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 final isNarrow = constraints.maxWidth < 600;
                 const hours = Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Opening Hours',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
@@ -420,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const contact = Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Contact Us',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
@@ -474,7 +380,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = Column(
+    final decorated = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
@@ -491,28 +397,18 @@ class ProductCard extends StatelessWidget {
             },
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 4),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 14, color: Colors.black),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              price,
-              style: const TextStyle(fontSize: 13, color: Colors.grey),
-            ),
-          ],
-        ),
+        const SizedBox(height: 4),
+        Text(title,
+            style: const TextStyle(fontSize: 14, color: Colors.black),
+            maxLines: 2),
+        const SizedBox(height: 4),
+        Text(price, style: const TextStyle(fontSize: 13, color: Colors.grey)),
       ],
     );
 
     if (onTap != null) {
-      return GestureDetector(onTap: onTap, child: content);
+      return GestureDetector(onTap: onTap, child: decorated);
     }
-    return content;
+    return decorated;
   }
 }

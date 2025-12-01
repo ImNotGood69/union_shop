@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/widgets/header_bar.dart';
 
 class CollectionsPage extends StatelessWidget {
   const CollectionsPage({super.key});
@@ -41,10 +42,7 @@ class CollectionsPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF4d2963),
-        title: const Text('Collections'),
-      ),
+      appBar: const HeaderBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.count(

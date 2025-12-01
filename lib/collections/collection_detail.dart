@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/widgets/header_bar.dart';
 
 class CollectionDetailPage extends StatefulWidget {
   const CollectionDetailPage({super.key});
@@ -80,10 +81,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: const Color(0xFF4d2963),
-      ),
+      appBar: const HeaderBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
