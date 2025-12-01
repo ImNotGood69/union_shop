@@ -6,6 +6,7 @@ import 'package:union_shop/contact/contact_page.dart';
 import 'package:union_shop/collections/collections_page.dart';
 import 'package:union_shop/collections/collection_detail.dart';
 import 'package:union_shop/widgets/header_bar.dart';
+import 'package:union_shop/widgets/mobile_drawer.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/auth/sign_in_page.dart';
 
@@ -80,11 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     const brandPurple = Color(0xFF4d2963);
     return Scaffold(
+      appBar: const HeaderBar(),
+      drawer: const MobileDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const HeaderBar(),
-
             // Carousel Hero Section
             SizedBox(
               height: 400,

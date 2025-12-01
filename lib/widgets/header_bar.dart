@@ -13,6 +13,8 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNarrow = MediaQuery.of(context).size.width < 768;
+
     return Material(
       color: Colors.white,
       elevation: 0,
@@ -40,44 +42,52 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             const Spacer(),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon:
-                        const Icon(Icons.search, size: 20, color: Colors.grey),
-                    onPressed: () async {
-                      final selected = await showSearch(
-                          context: context,
-                          delegate: ProductSearchDelegate(products));
-                      if (selected != null) {
-                        Navigator.pushNamed(context, '/product',
-                            arguments: selected);
-                      }
-                    },
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pushNamed(context, '/signin'),
-                    child: const Text('Sign In',
-                        style: TextStyle(color: Colors.grey)),
-                  ),
-                  const AboutButton(),
-                  TextButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/collections'),
-                    child: const Text('Collections',
-                        style: TextStyle(color: Colors.grey)),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.shopping_bag_outlined,
-                        size: 20, color: Colors.grey),
-                    onPressed: () {},
-                  ),
-                ],
+            if (isNarrow)
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu, size: 24, color: Colors.grey),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              )
+            else
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.search,
+                          size: 20, color: Colors.grey),
+                      onPressed: () async {
+                        final selected = await showSearch(
+                            context: context,
+                            delegate: ProductSearchDelegate(products));
+                        if (selected != null && context.mounted) {
+                          Navigator.pushNamed(context, '/product',
+                              arguments: selected);
+                        }
+                      },
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pushNamed(context, '/signin'),
+                      child: const Text('Sign In',
+                          style: TextStyle(color: Colors.grey)),
+                    ),
+                    const AboutButton(),
+                    TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/collections'),
+                      child: const Text('Collections',
+                          style: TextStyle(color: Colors.grey)),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.shopping_bag_outlined,
+                          size: 20, color: Colors.grey),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),

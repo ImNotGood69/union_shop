@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/header_bar.dart';
+import 'package:union_shop/widgets/mobile_drawer.dart';
 
 class CollectionDetailPage extends StatefulWidget {
   const CollectionDetailPage({super.key});
@@ -82,6 +83,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
 
     return Scaffold(
       appBar: const HeaderBar(),
+      drawer: const MobileDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

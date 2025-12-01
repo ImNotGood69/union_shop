@@ -119,3 +119,5 @@ List of patched files with unified diffs.
 Short rationale per change.
 Post-fix command outputs for dart analyze or flutter analyze.
 
+I want the nav bar to collapse into a menu that slides to the left if the screen used gets to small to show the full nav bar. So that people who are using phones still have access to all the features
+

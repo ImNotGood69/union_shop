@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/header_bar.dart';
+import 'package:union_shop/widgets/mobile_drawer.dart';
 
 class CollectionsPage extends StatelessWidget {
   const CollectionsPage({super.key});
@@ -43,6 +44,7 @@ class CollectionsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: const HeaderBar(),
+      drawer: const MobileDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.count(
