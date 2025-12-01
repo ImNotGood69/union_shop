@@ -10,35 +10,43 @@ class CollectionsPage extends StatelessWidget {
     final collections = [
       {
         'title': 'Autumn Favourites',
-        'image': 'https://via.placeholder.com/400x300?text=Autumn+Favourites'
+        'image':
+            'https://shop.upsu.net/cdn/shop/files/SageHoodie_530x530@2x.png?v=1745583498'
       },
       {
         'title': 'On sale!',
-        'image': 'https://via.placeholder.com/400x300?text=On+sale!'
+        'image':
+            'https://media.posterstore.com/site_images/686306ea92c536b9cc92ab5f_235008937_PS53025-5.jpg?auto=compress%2Cformat&fit=max&w=3840'
       },
       {
         'title': 'Winter Warmers',
-        'image': 'https://via.placeholder.com/400x300?text=Winter+Warmers'
+        'image':
+            'https://images.squarespace-cdn.com/content/v1/552f35bee4b0955308211538/1464586967921-3GHDHTJ8W2IXCNHQ5KB7/Yummy+Dogs+-+Winter+Warmers+The+Cold+Weather+Party+Guide.jpg?format=1000w'
       },
       {
         'title': 'Summer Sale',
-        'image': 'https://via.placeholder.com/400x300?text=Summer+Sale'
+        'image':
+            'https://images.pexels.com/photos/33044/sunflower-sun-summer-yellow.jpg?cs=srgb&dl=pexels-pixabay-33044.jpg&fm=jpg'
       },
       {
         'title': 'New Arrivals',
-        'image': 'https://via.placeholder.com/400x300?text=New+Arrivals'
+        'image':
+            'https://shop.upsu.net/cdn/shop/files/GreyHoodieFinal_1024x1024@2x.jpg?v=1742201957'
       },
       {
         'title': 'Staff Picks',
-        'image': 'https://via.placeholder.com/400x300?text=Staff+Picks'
+        'image':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxjQc4yYW3O8ar5THil6vIY_hw2Xat5xiWig&s'
       },
       {
         'title': 'Gift Ideas',
-        'image': 'https://via.placeholder.com/400x300?text=Gift+Ideas'
+        'image':
+            'https://media.istockphoto.com/id/1824629274/photo/christmas-gift-boxes-festive-wrapped-presents-composition-winter-holiday-season-gifts.jpg?s=612x612&w=0&k=20&c=2NeA7WaSzKuI6XNBZKbfukyIOXX3TSKzvEX0ADRoULk='
       },
       {
         'title': 'Limited Edition',
-        'image': 'https://via.placeholder.com/400x300?text=Limited+Edition'
+        'image':
+            'https://shop.upsu.net/cdn/shop/products/GradPurple_1200x1200.png?v=1657288025'
       },
     ];
 
