@@ -46,25 +46,25 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         {
           'title': 'Placeholder Product 3',
           'price': '£15.00',
-          'originalPrice': '£15.00',
+          'originalPrice': '£25.00',
           'image': 'https://via.placeholder.com/400x300?text=Product+3'
         },
         {
           'title': 'Placeholder Product 4',
           'price': '£18.00',
-          'originalPrice': '£18.00',
+          'originalPrice': '£30.00',
           'image': 'https://via.placeholder.com/400x300?text=Product+4'
         },
         {
           'title': 'Placeholder Product 5',
           'price': '£12.00',
-          'originalPrice': '£12.00',
+          'originalPrice': '£20.00',
           'image': 'https://via.placeholder.com/400x300?text=Product+5'
         },
         {
           'title': 'Placeholder Product 6',
           'price': '£22.00',
-          'originalPrice': '£22.00',
+          'originalPrice': '£38.00',
           'image': 'https://via.placeholder.com/400x300?text=Product+6'
         },
       ];
