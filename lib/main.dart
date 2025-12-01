@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _page = 0;
   Timer? _carouselTimer;
+  String _selectedFilter = 'All';
 
   @override
   void initState() {
@@ -77,9 +78,36 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  List<dynamic> _sortProducts(List<dynamic> products) {
+    final sorted = List.from(products);
+
+    if (_selectedFilter == 'Price: Low to High') {
+      sorted.sort((a, b) {
+        final priceA = double.tryParse(a.price.replaceAll('£', '')) ?? 0;
+        final priceB = double.tryParse(b.price.replaceAll('£', '')) ?? 0;
+        return priceA.compareTo(priceB);
+      });
+    } else if (_selectedFilter == 'Price: High to Low') {
+      sorted.sort((a, b) {
+        final priceA = double.tryParse(a.price.replaceAll('£', '')) ?? 0;
+        final priceB = double.tryParse(b.price.replaceAll('£', '')) ?? 0;
+        return priceB.compareTo(priceA);
+      });
+    } else if (_selectedFilter == 'A-Z') {
+      sorted.sort((a, b) => a.title.compareTo(b.title));
+    } else if (_selectedFilter == 'Z-A') {
+      sorted.sort((a, b) => b.title.compareTo(a.title));
+    }
+    // 'All' keeps original order
+
+    return sorted;
+  }
+
   @override
   Widget build(BuildContext context) {
     const brandPurple = Color(0xFF4d2963);
+    final sortedProducts = _sortProducts(products);
+
     return Scaffold(
       appBar: const HeaderBar(),
       drawer: const MobileDrawer(),
@@ -276,7 +304,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         letterSpacing: 1,
                       ),
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 24),
+                    // Filter dropdown
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Sort by:',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600)),
+                          DropdownButton<String>(
+                            value: _selectedFilter,
+                            items: const [
+                              DropdownMenuItem(
+                                  value: 'All', child: Text('All')),
+                              DropdownMenuItem(
+                                  value: 'Price: Low to High',
+                                  child: Text('Price: Low to High')),
+                              DropdownMenuItem(
+                                  value: 'Price: High to Low',
+                                  child: Text('Price: High to Low')),
+                              DropdownMenuItem(
+                                  value: 'A-Z', child: Text('A-Z')),
+                              DropdownMenuItem(
+                                  value: 'Z-A', child: Text('Z-A')),
+                            ],
+                            onChanged: (v) {
+                              setState(() => _selectedFilter = v ?? 'All');
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -285,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : (MediaQuery.of(context).size.width > 600 ? 2 : 1),
                       crossAxisSpacing: 24,
                       mainAxisSpacing: 48,
-                      children: products
+                      children: sortedProducts
                           .map((p) => GestureDetector(
                                 onTap: () => Navigator.pushNamed(
                                     context, '/product',

@@ -2,12 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/header_bar.dart';
 import 'package:union_shop/widgets/mobile_drawer.dart';
 
-class CollectionsPage extends StatelessWidget {
+class CollectionsPage extends StatefulWidget {
   const CollectionsPage({super.key});
 
   @override
+  State<CollectionsPage> createState() => _CollectionsPageState();
+}
+
+class _CollectionsPageState extends State<CollectionsPage> {
+  String _selectedFilter = 'All';
+
+  List<Map<String, String>> _sortCollections(
+      List<Map<String, String>> collections) {
+    final sorted = List<Map<String, String>>.from(collections);
+
+    if (_selectedFilter == 'A-Z') {
+      sorted.sort((a, b) => (a['title'] ?? '').compareTo(b['title'] ?? ''));
+    } else if (_selectedFilter == 'Z-A') {
+      sorted.sort((a, b) => (b['title'] ?? '').compareTo(a['title'] ?? ''));
+    }
+    // 'All' keeps original order
+
+    return sorted;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final collections = [
+    final baseCollections = [
       {
         'title': 'Autumn Favourites',
         'image':
@@ -50,53 +71,85 @@ class CollectionsPage extends StatelessWidget {
       },
     ];
 
+    final collections = _sortCollections(baseCollections);
+
     return Scaffold(
       appBar: const HeaderBar(),
       drawer: const MobileDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: MediaQuery.of(context).size.width > 1200
-              ? 4
-              : (MediaQuery.of(context).size.width > 800
-                  ? 3
-                  : (MediaQuery.of(context).size.width > 600 ? 2 : 1)),
-          childAspectRatio: 4 / 3,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          children: collections.map((c) {
-            return InkWell(
-              onTap: () => Navigator.pushNamed(context, '/collections/detail',
-                  arguments: c),
-              child: Card(
-                clipBehavior: Clip.hardEdge,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 120,
-                      width: double.infinity,
-                      child: Image.network(
-                        c['image']!,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Container(color: Colors.grey[300]),
+      body: Column(
+        children: [
+          // Filter dropdown
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Sort by:',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                DropdownButton<String>(
+                  value: _selectedFilter,
+                  items: const [
+                    DropdownMenuItem(value: 'All', child: Text('All')),
+                    DropdownMenuItem(value: 'A-Z', child: Text('A-Z')),
+                    DropdownMenuItem(value: 'Z-A', child: Text('Z-A')),
+                  ],
+                  onChanged: (v) {
+                    setState(() => _selectedFilter = v ?? 'All');
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: GridView.count(
+                crossAxisCount: MediaQuery.of(context).size.width > 1200
+                    ? 4
+                    : (MediaQuery.of(context).size.width > 800
+                        ? 3
+                        : (MediaQuery.of(context).size.width > 600 ? 2 : 1)),
+                childAspectRatio: 4 / 3,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                children: collections.map((c) {
+                  return InkWell(
+                    onTap: () => Navigator.pushNamed(
+                        context, '/collections/detail',
+                        arguments: c),
+                    child: Card(
+                      clipBehavior: Clip.hardEdge,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 120,
+                            width: double.infinity,
+                            child: Image.network(
+                              c['image']!,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(color: Colors.grey[300]),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 8.0),
+                            child: Text(c['title']!,
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600)),
+                          ),
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 8.0),
-                      child: Text(c['title']!,
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w600)),
-                    ),
-                  ],
-                ),
+                  );
+                }).toList(),
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -12,6 +12,31 @@ class CollectionDetailPage extends StatefulWidget {
 class _CollectionDetailPageState extends State<CollectionDetailPage> {
   String _selectedFilter = 'All';
 
+  List<Map<String, String>> _sortProducts(List<Map<String, String>> products) {
+    final sorted = List<Map<String, String>>.from(products);
+
+    if (_selectedFilter == 'Price: Low to High') {
+      sorted.sort((a, b) {
+        final priceA =
+            double.tryParse(a['price']?.replaceAll('£', '') ?? '0') ?? 0;
+        final priceB =
+            double.tryParse(b['price']?.replaceAll('£', '') ?? '0') ?? 0;
+        return priceA.compareTo(priceB);
+      });
+    } else if (_selectedFilter == 'Price: High to Low') {
+      sorted.sort((a, b) {
+        final priceA =
+            double.tryParse(a['price']?.replaceAll('£', '') ?? '0') ?? 0;
+        final priceB =
+            double.tryParse(b['price']?.replaceAll('£', '') ?? '0') ?? 0;
+        return priceB.compareTo(priceA);
+      });
+    }
+    // 'All' and 'Newest' keep original order
+
+    return sorted;
+  }
+
   @override
   Widget build(BuildContext context) {
     final args =
@@ -25,12 +50,12 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         args?['image'] ?? 'https://via.placeholder.com/800x400?text=Collection';
 
     // placeholder product list for this collection
-    late final List<Map<String, String>> products;
+    late final List<Map<String, String>> baseProducts;
 
     if (title == 'Black Friday' || title == 'On sale!') {
       // populate On sale! with the requested product names and both
       // discounted and original prices (original shown struck-through)
-      products = [
+      baseProducts = [
         {
           'title': 'Portsmouth University 2025 Hoodie',
           'price': '£25.00', // discounted
@@ -88,7 +113,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         },
       ];
     } else {
-      products = List.generate(
+      baseProducts = List.generate(
           6,
           (i) => {
                 'title': 'Placeholder Product ${i + 1}',
@@ -98,6 +123,9 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                     'https://via.placeholder.com/400x300?text=Product+${i + 1}'
               });
     }
+
+    // Apply sorting
+    final products = _sortProducts(baseProducts);
 
     return Scaffold(
       appBar: const HeaderBar(),
@@ -151,13 +179,13 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                 ),
               ),
 
-            // dummy filter dropdown (non-functional)
+            // filter dropdown
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Filter by:',
+                  const Text('Sort by:',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   DropdownButton<String>(
