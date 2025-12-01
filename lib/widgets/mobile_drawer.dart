@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/search/product_search.dart';
 import 'package:union_shop/data/products.dart';
+import 'package:union_shop/providers/cart_provider.dart';
 
 class MobileDrawer extends StatelessWidget {
   const MobileDrawer({super.key});
@@ -90,13 +92,52 @@ class MobileDrawer extends StatelessWidget {
                   Navigator.pushNamed(context, '/contact');
                 },
               ),
-              ListTile(
-                leading:
-                    const Icon(Icons.shopping_bag_outlined, color: Colors.grey),
-                title: const Text('Shopping Bag'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+              Consumer<CartProvider>(
+                builder: (ctx, cart, child) => ListTile(
+                  leading: Stack(
+                    children: [
+                      const Icon(Icons.shopping_bag_outlined,
+                          color: Colors.grey),
+                      if (cart.totalQuantity > 0)
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: brandPurple,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 12,
+                              minHeight: 12,
+                            ),
+                            child: Text(
+                              '${cart.totalQuantity}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  title: const Text('Shopping Bag'),
+                  trailing: cart.totalQuantity > 0
+                      ? Text(
+                          '${cart.totalQuantity} items',
+                          style:
+                              TextStyle(color: Colors.grey[600], fontSize: 12),
+                        )
+                      : null,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/cart');
+                  },
+                ),
               ),
             ],
           ),

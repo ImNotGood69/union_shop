@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/product_page.dart';
 import 'package:union_shop/about/about_page.dart';
 import 'package:union_shop/contact/contact_page.dart';
@@ -9,6 +10,8 @@ import 'package:union_shop/widgets/header_bar.dart';
 import 'package:union_shop/widgets/mobile_drawer.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/auth/sign_in_page.dart';
+import 'package:union_shop/cart/cart_page.dart';
+import 'package:union_shop/providers/cart_provider.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -19,22 +22,26 @@ class UnionShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Union Shop',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4d2963)),
+    return ChangeNotifierProvider(
+      create: (ctx) => CartProvider(),
+      child: MaterialApp(
+        title: 'Union Shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF4d2963)),
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const HomeScreen(),
+          '/product': (context) => const ProductPage(),
+          '/about': (context) => const AboutPage(),
+          '/contact': (context) => const ContactPage(),
+          '/collections': (context) => const CollectionsPage(),
+          '/collections/detail': (context) => const CollectionDetailPage(),
+          '/signin': (context) => const SignInPage(),
+          '/cart': (context) => const CartPage(),
+        },
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/product': (context) => const ProductPage(),
-        '/about': (context) => const AboutPage(),
-        '/contact': (context) => const ContactPage(),
-        '/collections': (context) => const CollectionsPage(),
-        '/collections/detail': (context) => const CollectionDetailPage(),
-        '/signin': (context) => const SignInPage(),
-      },
     );
   }
 }

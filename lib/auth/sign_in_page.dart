@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:union_shop/providers/cart_provider.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -36,6 +38,41 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(
         title: const Text('Sign In'),
         backgroundColor: brandPurple,
+        actions: [
+          Consumer<CartProvider>(
+            builder: (ctx, cart, child) => Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.shopping_bag_outlined,
+                      color: Colors.white),
+                  onPressed: () => Navigator.pushNamed(context, '/cart'),
+                ),
+                if (cart.totalQuantity > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints:
+                          const BoxConstraints(minWidth: 16, minHeight: 16),
+                      child: Text(
+                        '${cart.totalQuantity}',
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: ConstrainedBox(

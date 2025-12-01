@@ -1,11 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:union_shop/models/product.dart';
 import 'package:union_shop/data/products.dart';
 import 'package:union_shop/search/product_search.dart';
 import 'package:union_shop/widgets/about_button.dart';
 import 'package:flutter/services.dart';
+import 'package:union_shop/providers/cart_provider.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -39,6 +41,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
+    final cart = Provider.of<CartProvider>(context, listen: false);
 
     // Handle both Product objects and Map data from collections
     String? productTitle;
@@ -46,12 +49,12 @@ class _ProductPageState extends State<ProductPage> {
     String? productImageUrl;
     String? originalPrice;
     String? productDescription;
+    String? productId;
 
     if (args is Product) {
-      productTitle = args.title;
-      productPrice = args.price;
       productImageUrl = args.imageUrl;
     } else if (args is Map<String, dynamic>) {
+      productId = args['id'] as String? ?? 'unknown';
       productTitle = args['title'] as String?;
       productPrice = args['price'] as String?;
       productImageUrl = args['imageUrl'] as String?;
@@ -246,10 +249,33 @@ class _ProductPageState extends State<ProductPage> {
                       ),
 
                       const SizedBox(height: 24),
-
-                      // Purchase button (non functional)
+                      // Purchase button
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          cart.addItem(
+                            productId: productId ?? 'unknown',
+                            title: productTitle ?? 'Unknown Product',
+                            price: productPrice ?? '£0.00',
+                            imageUrl: productImageUrl ?? '',
+                            size: _selectedSize,
+                            originalPrice: originalPrice,
+                            description: productDescription,
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Added to cart: $productTitle (Size: $_selectedSize)'),
+                              duration: const Duration(seconds: 2),
+                              action: SnackBarAction(
+                                label: 'View Cart',
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/cart');
+                                },
+                              ),
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: brandPurple,
                           foregroundColor: Colors.white,
