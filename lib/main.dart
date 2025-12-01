@@ -129,9 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             decoration: const BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                  'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-                                ),
+                                image: AssetImage('assets/images/Banner_2.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -171,8 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Container(
                             decoration: const BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282'),
+                                image: AssetImage('assets/images/Banner_1.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
