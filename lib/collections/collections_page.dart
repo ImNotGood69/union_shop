@@ -12,8 +12,8 @@ class CollectionsPage extends StatelessWidget {
         'image': 'https://via.placeholder.com/400x300?text=Autumn+Favourites'
       },
       {
-        'title': 'Sale',
-        'image': 'https://via.placeholder.com/400x300?text=Sale'
+        'title': 'On sale!',
+        'image': 'https://via.placeholder.com/400x300?text=On+sale!'
       },
       {
         'title': 'Winter Warmers',
