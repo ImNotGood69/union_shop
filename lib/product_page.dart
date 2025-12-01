@@ -38,7 +38,27 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    final product = ModalRoute.of(context)?.settings.arguments as Product?;
+    final args = ModalRoute.of(context)?.settings.arguments;
+
+    // Handle both Product objects and Map data from collections
+    String? productTitle;
+    String? productPrice;
+    String? productImageUrl;
+    String? originalPrice;
+    String? productDescription;
+
+    if (args is Product) {
+      productTitle = args.title;
+      productPrice = args.price;
+      productImageUrl = args.imageUrl;
+    } else if (args is Map<String, dynamic>) {
+      productTitle = args['title'] as String?;
+      productPrice = args['price'] as String?;
+      productImageUrl = args['imageUrl'] as String?;
+      originalPrice = args['originalPrice'] as String?;
+      productDescription = args['description'] as String?;
+    }
+
     const brandPurple = Color(0xFF4d2963);
 
     final sizes = ['S', 'M', 'L', 'XL'];
@@ -274,7 +294,7 @@ class _ProductPageState extends State<ProductPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
-                          product?.imageUrl ??
+                          productImageUrl ??
                               'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
                           fit: BoxFit.cover,
                           width: double.infinity,
@@ -303,19 +323,35 @@ class _ProductPageState extends State<ProductPage> {
 
                     // Name / Price / Description
                     Text(
-                      product?.title ?? 'Placeholder Product Name',
+                      productTitle ?? 'Placeholder Product Name',
                       style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.black),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      product?.price ?? '£15.00',
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4d2963)),
+                    Row(
+                      children: [
+                        Text(
+                          productPrice ?? '£15.00',
+                          style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4d2963)),
+                        ),
+                        if (originalPrice != null &&
+                            originalPrice != productPrice) ...[
+                          const SizedBox(width: 12),
+                          Text(
+                            originalPrice,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 12),
                     const Text(
@@ -327,9 +363,8 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      product == null
-                          ? 'This is a placeholder description for the product. Replace with real product information.'
-                          : '',
+                      productDescription ??
+                          'This is a placeholder description for the product. Replace with real product information.',
                       style: const TextStyle(
                           fontSize: 16, color: Colors.grey, height: 1.5),
                     ),

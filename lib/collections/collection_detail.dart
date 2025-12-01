@@ -35,38 +35,56 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
           'title': 'Portsmouth University 2025 Hoodie',
           'price': '£25.00', // discounted
           'originalPrice': '£45.00',
-          'image': 'https://via.placeholder.com/400x300?text=Hoodie'
+          'image':
+              'https://shop.upsu.net/cdn/shop/products/GradGrey_5184x.jpg?v=1657288025',
+          'description':
+              'Stay warm and show your Portsmouth University pride with this comfortable 2025 hoodie. Made from premium materials for ultimate comfort.'
         },
         {
           'title': 'Neutral Classic Sweatshirt',
           'price': '£20.00',
           'originalPrice': '£35.00',
-          'image': 'https://via.placeholder.com/400x300?text=Sweatshirt'
+          'image':
+              'https://shop.upsu.net/cdn/shop/files/Neutral_-_Sept_24_300x300.png?v=1750063651',
+          'description':
+              'A versatile classic sweatshirt in neutral tones, perfect for everyday wear on campus or casual outings.'
         },
         // remaining placeholders
         {
-          'title': 'Placeholder Product 3',
+          'title': 'red and purple hoodie',
           'price': '£15.00',
           'originalPrice': '£25.00',
-          'image': 'https://via.placeholder.com/400x300?text=Product+3'
+          'image':
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFdw2yoLVCbLmGbxOh31qTAk-OGEQRXr4LUQ&s',
+          'description':
+              'Bold red and purple hoodie featuring university colors. A stylish way to represent your school spirit.'
         },
         {
-          'title': 'Placeholder Product 4',
-          'price': '£18.00',
-          'originalPrice': '£30.00',
-          'image': 'https://via.placeholder.com/400x300?text=Product+4'
+          'title': 'UP logo lanyard',
+          'price': '£1.50',
+          'originalPrice': '£4.00',
+          'image':
+              'https://shop.upsu.net/cdn/shop/products/IMG_0645_345x345@2x.jpg?v=1557218961',
+          'description':
+              'Practical lanyard with the official UP logo, ideal for holding your student ID, keys, or access cards.'
         },
         {
-          'title': 'Placeholder Product 5',
+          'title': 'Uni colours hoodie',
           'price': '£12.00',
           'originalPrice': '£20.00',
-          'image': 'https://via.placeholder.com/400x300?text=Product+5'
+          'image':
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW34pjvxrriWxTK8JMQWMBLUAPQPkxGgoJoZImOoVydOmNqWnhtujYteaYrqLWRQXJRLc&usqp=CAU',
+          'description':
+              'Cozy hoodie showcasing the official university colors. Perfect for chilly days on campus or relaxing at home.'
         },
         {
-          'title': 'Placeholder Product 6',
-          'price': '£22.00',
-          'originalPrice': '£38.00',
-          'image': 'https://via.placeholder.com/400x300?text=Product+6'
+          'title': 'Campus mug',
+          'price': '£5.00',
+          'originalPrice': '£9.00',
+          'image':
+              'https://images-eu.ssl-images-amazon.com/images/I/71g2qnv0TCL._AC_UL495_SR435,495_.jpg',
+          'description':
+              'Start your day with this ceramic campus mug featuring the university branding. Great for coffee, tea, or hot chocolate.'
         },
       ];
     } else {
@@ -179,73 +197,93 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                 mainAxisSpacing: 24,
                 // slightly taller cells to accommodate price lines
                 childAspectRatio: 0.75,
-                children: products.map((p) {
+                children: products.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final p = entry.value;
                   final isDiscounted =
                       (p['originalPrice'] ?? '') != (p['price'] ?? '');
-                  return Card(
-                    clipBehavior: Clip.hardEdge,
-                    elevation: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 1,
-                          child: Image.network(
-                            p['image']!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Container(
-                              color: Colors.grey[300],
-                              child: const Center(
-                                child: Icon(Icons.image_not_supported,
-                                    color: Colors.grey),
+                  return InkWell(
+                    onTap: () {
+                      // Create a product object to pass to ProductPage
+                      final productData = {
+                        'id': 'sale_${index + 1}',
+                        'title': p['title']!,
+                        'price': p['price']!,
+                        'imageUrl': p['image']!,
+                        'originalPrice': p['originalPrice'],
+                        'description': p['description'],
+                      };
+                      Navigator.pushNamed(
+                        context,
+                        '/product',
+                        arguments: productData,
+                      );
+                    },
+                    child: Card(
+                      clipBehavior: Clip.hardEdge,
+                      elevation: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child: Image.network(
+                              p['image']!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                color: Colors.grey[300],
+                                child: const Center(
+                                  child: Icon(Icons.image_not_supported,
+                                      color: Colors.grey),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-                          child: Text(
-                            p['title']!,
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                            child: Text(
+                              p['title']!,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w600),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                p['price'] ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: isDiscounted
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                  color: isDiscounted
-                                      ? const Color(0xFF4d2963)
-                                      : Colors.grey[800],
-                                ),
-                              ),
-                              if (isDiscounted) ...[
-                                const SizedBox(width: 8),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
                                 Text(
-                                  p['originalPrice'] ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough,
+                                  p['price'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: isDiscounted
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    color: isDiscounted
+                                        ? const Color(0xFF4d2963)
+                                        : Colors.grey[800],
                                   ),
                                 ),
+                                if (isDiscounted) ...[
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    p['originalPrice'] ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 }).toList(),
