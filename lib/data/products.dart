@@ -17,15 +17,15 @@ final List<Product> products = [
   ),
   Product(
     id: 'p3',
-    title: 'Placeholder Product 3',
-    price: '£20.00',
+    title: 'Grey Hoodie',
+    price: '£45.00',
     imageUrl:
         'https://shop.upsu.net/cdn/shop/files/GreyHoodieFinal_1024x1024@2x.jpg?v=1742201957', 
   ),
   Product(
     id: 'p4',
-    title: 'Placeholder Product 4',
-    price: '£25.00',
+    title: 'Dark Grey Hoodie',
+    price: '£45.00',
     imageUrl:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxjQc4yYW3O8ar5THil6vIY_hw2Xat5xiWig&s', 
   ),
