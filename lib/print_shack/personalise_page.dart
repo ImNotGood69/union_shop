@@ -138,8 +138,9 @@ class _PersonalisePageState extends State<PersonalisePage> {
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text(
-                                    'Personalisation feature coming soon!'),
+                                content: Text('Added to cart!'),
+                                backgroundColor: Colors.green,
+                                duration: Duration(seconds: 2),
                               ),
                             );
                           },
@@ -152,7 +153,7 @@ class _PersonalisePageState extends State<PersonalisePage> {
                             ),
                           ),
                           child: const Text(
-                            'Preview Design',
+                            'Add to Cart',
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
