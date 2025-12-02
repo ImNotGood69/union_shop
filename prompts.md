@@ -123,3 +123,64 @@ I want the nav bar to collapse into a menu that slides to the left if the screen
 
 prompt to write descriptions for items
 for the ones that dont have place holders titles, please change the description to one or two sentences describing the item, use the title as reference
+
+You are editing a Flutter app. Make the product search global and include products from the “On sale!” collection so users can find items like “red and purple hoodie” and “Neutral Classic Sweatshirt” from anywhere in the app. Selecting a result should navigate to the existing product page (route /product) so the user can add it to cart.
+
+Context and constraints:
+
+Relevant files:
+header_bar.dart (the global app bar with the search icon; uses showSearch and ProductSearchDelegate)
+product_search.dart (current search delegate)
+products.dart (base product list)
+on_sale_products.dart (dedicated on-sale list; create if missing)
+collection_detail.dart (On sale! page defines the same items inline; do not rely on this at runtime for search)
+product_page.dart (existing product page, already implemented and reachable at /product)
+Current Product model (do not change structure):
+class Product { String id; String title; String price; String imageUrl; }
+Keep search accessible everywhere by continuing to use HeaderBar as the appBar.
+What to implement:
+
+Create a shared catalog:
+
+Add lib/data/catalog.dart that exports allProducts, a deduplicated list combining:
+products from products.dart
+onSaleProducts from on_sale_products.dart (create this file and list if it doesn’t exist)
+Ensure onSaleProducts contains at least:
+Portsmouth University 2025 Hoodie (£25.00)
+Neutral Classic Sweatshirt (£20.00)
+red and purple hoodie (£15.00)
+UP logo lanyard (£1.50)
+Uni colours hoodie (£12.00)
+Campus mug (£5.00)
+Deduplicate by id.
+Update the search delegate:
+
+In product_search.dart, import lib/data/catalog.dart and use allProducts for both suggestions and results.
+Case-insensitive title matching; no need to type “sale” to see on-sale items — they should be searchable by name.
+When query is empty, show up to 5 popular suggestions from allProducts.
+Keep current UI (thumbnail, title, price). No model changes.
+On tap of a result: close(context, product)
+Wire the header to use the combined catalog:
+
+In header_bar.dart, replace the ProductSearchDelegate(products) call so that it uses the combined allProducts.
+After showSearch, if a product is returned, navigate to /product with the correct arguments that product_page.dart expects. If it expects a Map, pass:
+id, title, price, imageUrl
+If it can accept a Product, pass the instance directly.
+Don’t regress other behavior:
+
+Do not modify unrelated UI or business logic.
+Keep the cart and product page behavior intact.
+Acceptance criteria:
+
+From any page (since HeaderBar is global), tapping the search icon opens the search dialog.
+Typing “red”, “neutral”, “hoodie”, “lanyard”, etc. shows matches from both base products and on-sale products.
+Selecting an item navigates to /product and the product page renders the image, title, and price; the Add to Cart flow still works.
+No changes to the Product model signature.
+No dependency or pubspec changes needed.
+Optional sanity snippet targets (for you to produce as patches):
+
+lib/data/catalog.dart with allProducts.
+on_sale_products.dart if not present.
+product_search.dart to use allProducts.
+header_bar.dart to instantiate the delegate with combined data and navigate on selection.
+Please implement the above with minimal, focused diffs and keep code style consistent with the project.

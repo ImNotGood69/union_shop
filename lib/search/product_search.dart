@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/models/product.dart';
+import 'package:union_shop/data/on_sale_products.dart';
 
 class ProductSearchDelegate extends SearchDelegate<Product?> {
   final List<Product> products;
@@ -33,9 +34,21 @@ class ProductSearchDelegate extends SearchDelegate<Product?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final q = query.toLowerCase();
-    final results =
-        products.where((p) => p.title.toLowerCase().contains(q)).toList();
+    final q = query.trim().toLowerCase();
+    final isSaleQuery = q.contains('sale');
+    final base = isSaleQuery ? onSaleProducts : products;
+    final tokens = q
+        .split(RegExp(r'\s+'))
+        .where((t) => t.isNotEmpty && t != 'sale')
+        .toList();
+
+    bool matchesPredicate(Product p) {
+      if (tokens.isEmpty) return true; // when query is exactly 'sale'
+      final title = p.title.toLowerCase();
+      return tokens.every((t) => title.contains(t));
+    }
+
+    final results = base.where(matchesPredicate).toList();
     if (results.isEmpty) return const Center(child: Text('No results'));
 
     return ListView.builder(
@@ -58,18 +71,32 @@ class ProductSearchDelegate extends SearchDelegate<Product?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final q = query.toLowerCase();
-    final matches = query.isEmpty
-        ? products.take(5).toList()
-        : products.where((p) => p.title.toLowerCase().contains(q)).toList();
+    final q = query.trim().toLowerCase();
+    final isSaleQuery = q.contains('sale');
+    final base = isSaleQuery ? onSaleProducts : products;
+    final tokens = q
+        .split(RegExp(r'\s+'))
+        .where((t) => t.isNotEmpty && t != 'sale')
+        .toList();
 
-    if (matches.isEmpty)
+    bool matchesPredicate(Product p) {
+      if (tokens.isEmpty) return true;
+      final title = p.title.toLowerCase();
+      return tokens.every((t) => title.contains(t));
+    }
+
+    final suggestions = query.isEmpty
+        ? base.take(5).toList()
+        : base.where(matchesPredicate).toList();
+
+    if (suggestions.isEmpty) {
       return const Center(child: Text('No matching products'));
+    }
 
     return ListView.builder(
-      itemCount: matches.length,
+      itemCount: suggestions.length,
       itemBuilder: (context, index) {
-        final p = matches[index];
+        final p = suggestions[index];
         return ListTile(
           leading: Image.network(p.imageUrl,
               width: 40,
