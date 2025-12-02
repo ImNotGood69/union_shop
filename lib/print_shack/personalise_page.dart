@@ -16,6 +16,7 @@ class _PersonalisePageState extends State<PersonalisePage> {
   final List<TextEditingController> _textControllers = [
     TextEditingController(),
   ];
+  String _selectedSize = 'M';
 
   double get _totalPrice {
     return _numberOfLines * 10.0;
@@ -64,7 +65,7 @@ class _PersonalisePageState extends State<PersonalisePage> {
       price: '£${_totalPrice.toStringAsFixed(2)}',
       imageUrl:
           'https://shop.upsu.net/cdn/shop/files/GreyHoodieFinal_1024x1024@2x.jpg?v=1742201957',
-      size: 'Custom',
+      size: _selectedSize,
       description: 'Text: $customization',
     );
 
@@ -139,10 +140,57 @@ class _PersonalisePageState extends State<PersonalisePage> {
                   );
 
                   final controlsWidget = Container(
-                    constraints: const BoxConstraints(maxWidth: 400),
+                    constraints: const BoxConstraints(maxWidth: 200),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        const Text(
+                          'Size',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.grey.shade300),
+                              color: Colors.white,
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selectedSize,
+                                isExpanded: true,
+                                items: const [
+                                  DropdownMenuItem(
+                                      value: 'XS', child: Text('XS')),
+                                  DropdownMenuItem(
+                                      value: 'S', child: Text('S')),
+                                  DropdownMenuItem(
+                                      value: 'M', child: Text('M')),
+                                  DropdownMenuItem(
+                                      value: 'L', child: Text('L')),
+                                  DropdownMenuItem(
+                                      value: 'XL', child: Text('XL')),
+                                  DropdownMenuItem(
+                                      value: 'XXL', child: Text('XXL')),
+                                ],
+                                onChanged: (value) {
+                                  if (value == null) return;
+                                  setState(() {
+                                    _selectedSize = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
                         const Text(
                           'Number of Text Lines',
                           style: TextStyle(

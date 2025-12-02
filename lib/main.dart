@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text('Placeholder Hero Title',
+                                Text('On Sale Now!',
                                     style: TextStyle(
                                         fontSize: 32,
                                         fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         height: 1.2)),
                                 SizedBox(height: 16),
                                 Text(
-                                    'This is placeholder text for the hero section.',
+                                    'On sale now! - up to half price. View On sale collection!',
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,

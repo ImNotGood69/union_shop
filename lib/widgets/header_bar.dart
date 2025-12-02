@@ -132,7 +132,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
                               top: 4,
                               child: Container(
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: brandPurple,
                                   shape: BoxShape.circle,
                                 ),
