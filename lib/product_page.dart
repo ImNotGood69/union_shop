@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/models/product.dart';
-import 'package:union_shop/data/products.dart';
+import 'package:union_shop/data/catalog.dart';
 import 'package:union_shop/search/product_search.dart';
 import 'package:union_shop/widgets/about_button.dart';
 import 'package:flutter/services.dart';
@@ -109,7 +109,7 @@ class _ProductPageState extends State<ProductPage> {
                             final Product? selected =
                                 await showSearch<Product?>(
                               context: context,
-                              delegate: ProductSearchDelegate(products),
+                              delegate: ProductSearchDelegate(allProducts),
                             );
                             if (selected != null) {
                               Navigator.pushNamed(context, '/product',

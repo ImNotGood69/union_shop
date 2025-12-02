@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:union_shop/search/product_search.dart';
-import 'package:union_shop/data/products.dart';
+import 'package:union_shop/data/catalog.dart';
 import 'package:union_shop/widgets/about_button.dart';
 import 'package:union_shop/providers/cart_provider.dart';
 
@@ -63,7 +63,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
                       onPressed: () async {
                         final selected = await showSearch(
                             context: context,
-                            delegate: ProductSearchDelegate(products));
+                            delegate: ProductSearchDelegate(allProducts));
                         if (selected != null && context.mounted) {
                           Navigator.pushNamed(context, '/product',
                               arguments: selected);
