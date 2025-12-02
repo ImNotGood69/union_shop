@@ -83,31 +83,34 @@ class _PersonalisePageState extends State<PersonalisePage> {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300),
-                            color: Colors.white,
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<int>(
-                              value: _numberOfLines,
-                              isExpanded: true,
-                              items: List.generate(
-                                10,
-                                (index) => DropdownMenuItem(
-                                  value: index + 1,
-                                  child: Text(
-                                      '${index + 1} line${index + 1 > 1 ? 's' : ''}'),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.grey.shade300),
+                              color: Colors.white,
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<int>(
+                                value: _numberOfLines,
+                                isExpanded: true,
+                                items: List.generate(
+                                  3,
+                                  (index) => DropdownMenuItem(
+                                    value: index + 1,
+                                    child: Text(
+                                        '${index + 1} line${index + 1 > 1 ? 's' : ''}'),
+                                  ),
                                 ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _numberOfLines = value ?? 1;
+                                  });
+                                },
                               ),
-                              onChanged: (value) {
-                                setState(() {
-                                  _numberOfLines = value ?? 1;
-                                });
-                              },
                             ),
                           ),
                         ),
@@ -115,12 +118,17 @@ class _PersonalisePageState extends State<PersonalisePage> {
                         ...List.generate(
                           _numberOfLines,
                           (index) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12.0),
+                            padding: const EdgeInsets.only(
+                                bottom: 12.0, right: 16.0),
                             child: TextField(
                               decoration: InputDecoration(
                                 labelText: 'Line ${index + 1}',
                                 border: const OutlineInputBorder(),
                                 hintText: 'Enter text for line ${index + 1}',
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
                               ),
                             ),
                           ),
