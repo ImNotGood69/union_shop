@@ -14,6 +14,10 @@ class PersonalisePage extends StatefulWidget {
 class _PersonalisePageState extends State<PersonalisePage> {
   int _numberOfLines = 1;
 
+  double get _totalPrice {
+    return _numberOfLines * 10.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,6 +135,35 @@ class _PersonalisePageState extends State<PersonalisePage> {
                                 ),
                               ),
                             ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Total Price:',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '£${_totalPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF4d2963),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 16),
