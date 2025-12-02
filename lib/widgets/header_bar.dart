@@ -82,6 +82,41 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
                       child: const Text('Collections',
                           style: TextStyle(color: Colors.grey)),
                     ),
+                    PopupMenuButton<String>(
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('The Print Shack',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 14)),
+                            SizedBox(width: 4),
+                            Icon(Icons.arrow_drop_down,
+                                color: Colors.grey, size: 20),
+                          ],
+                        ),
+                      ),
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: 'about',
+                          child: Text('About Print Shack'),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'personalise',
+                          child: Text('Personalise Clothes'),
+                        ),
+                      ],
+                      onSelected: (String value) {
+                        if (value == 'about') {
+                          Navigator.pushNamed(context, '/print-shack/about');
+                        } else if (value == 'personalise') {
+                          Navigator.pushNamed(
+                              context, '/print-shack/personalise');
+                        }
+                      },
+                    ),
                     Consumer<CartProvider>(
                       builder: (ctx, cart, child) => Stack(
                         children: [

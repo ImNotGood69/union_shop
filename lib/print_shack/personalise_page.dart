@@ -1,0 +1,181 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:union_shop/widgets/header_bar.dart';
+import 'package:union_shop/widgets/mobile_drawer.dart';
+import 'package:union_shop/providers/cart_provider.dart';
+
+class PersonalisePage extends StatefulWidget {
+  const PersonalisePage({super.key});
+
+  @override
+  State<PersonalisePage> createState() => _PersonalisePageState();
+}
+
+class _PersonalisePageState extends State<PersonalisePage> {
+  int _numberOfLines = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const HeaderBar(),
+      drawer: const MobileDrawer(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Personalise Your Clothes',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth > 800;
+
+                  final imageWidget = Container(
+                    width: isWide ? 400 : double.infinity,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        'https://shop.upsu.net/cdn/shop/files/GreyHoodieFinal_1024x1024@2x.jpg?v=1742201957',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.image,
+                                    size: 64, color: Colors.grey[400]),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Placeholder Image',
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+
+                  final controlsWidget = Container(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'Number of Text Lines',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey.shade300),
+                            color: Colors.white,
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<int>(
+                              value: _numberOfLines,
+                              isExpanded: true,
+                              items: List.generate(
+                                10,
+                                (index) => DropdownMenuItem(
+                                  value: index + 1,
+                                  child: Text(
+                                      '${index + 1} line${index + 1 > 1 ? 's' : ''}'),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _numberOfLines = value ?? 1;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        ...List.generate(
+                          _numberOfLines,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12.0),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                labelText: 'Line ${index + 1}',
+                                border: const OutlineInputBorder(),
+                                hintText: 'Enter text for line ${index + 1}',
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Personalisation feature coming soon!'),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF4d2963),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'Preview Design',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (isWide) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        imageWidget,
+                        const SizedBox(width: 32),
+                        Expanded(child: controlsWidget),
+                      ],
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      imageWidget,
+                      const SizedBox(height: 24),
+                      controlsWidget,
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

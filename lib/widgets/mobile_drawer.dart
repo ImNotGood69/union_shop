@@ -84,6 +84,28 @@ class MobileDrawer extends StatelessWidget {
                   Navigator.pushNamed(context, '/collections');
                 },
               ),
+              ExpansionTile(
+                leading: const Icon(Icons.print, color: Colors.grey),
+                title: const Text('The Print Shack'),
+                children: [
+                  ListTile(
+                    contentPadding: const EdgeInsets.only(left: 72),
+                    title: const Text('About Print Shack'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/print-shack/about');
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.only(left: 72),
+                    title: const Text('Personalise Clothes'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/print-shack/personalise');
+                    },
+                  ),
+                ],
+              ),
               ListTile(
                 leading: const Icon(Icons.phone_outlined, color: Colors.grey),
                 title: const Text('Contact'),
