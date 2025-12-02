@@ -13,9 +13,73 @@ class PersonalisePage extends StatefulWidget {
 
 class _PersonalisePageState extends State<PersonalisePage> {
   int _numberOfLines = 1;
+  final List<TextEditingController> _textControllers = [
+    TextEditingController(),
+  ];
 
   double get _totalPrice {
     return _numberOfLines * 10.0;
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _textControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _updateControllers() {
+    while (_textControllers.length < _numberOfLines) {
+      _textControllers.add(TextEditingController());
+    }
+    while (_textControllers.length > _numberOfLines) {
+      _textControllers.removeLast().dispose();
+    }
+  }
+
+  void _addToCart() {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+
+    final textLines = _textControllers
+        .map((controller) => controller.text.trim())
+        .where((text) => text.isNotEmpty)
+        .toList();
+
+    if (textLines.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter at least one line of text'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final customization = textLines.join(' | ');
+
+    cartProvider.addItem(
+      productId: 'custom-hoodie-${DateTime.now().millisecondsSinceEpoch}',
+      title: 'Personalised Hoodie',
+      price: '£${_totalPrice.toStringAsFixed(2)}',
+      imageUrl:
+          'https://shop.upsu.net/cdn/shop/files/GreyHoodieFinal_1024x1024@2x.jpg?v=1742201957',
+      size: 'Custom',
+      description: 'Text: $customization',
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Added to cart!'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    // Clear the text fields
+    for (var controller in _textControllers) {
+      controller.clear();
+    }
   }
 
   @override
@@ -112,6 +176,7 @@ class _PersonalisePageState extends State<PersonalisePage> {
                                 onChanged: (value) {
                                   setState(() {
                                     _numberOfLines = value ?? 1;
+                                    _updateControllers();
                                   });
                                 },
                               ),
@@ -125,6 +190,7 @@ class _PersonalisePageState extends State<PersonalisePage> {
                             padding: const EdgeInsets.only(
                                 bottom: 12.0, right: 16.0),
                             child: TextField(
+                              controller: _textControllers[index],
                               decoration: InputDecoration(
                                 labelText: 'Line ${index + 1}',
                                 border: const OutlineInputBorder(),
@@ -168,15 +234,7 @@ class _PersonalisePageState extends State<PersonalisePage> {
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Added to cart!'),
-                                backgroundColor: Colors.green,
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          },
+                          onPressed: _addToCart,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4d2963),
                             foregroundColor: Colors.white,
