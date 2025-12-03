@@ -189,3 +189,5 @@ when i run the code, a message pops up saying:
 you are using an unsupported command-line flag: --no-sandbox. This poses stability and security risks. how do i fix this from popping up
 
 generate me some tests for the print shack. ensure that they all work
+
+generate me some tests for the cart page. ensure that they all work
