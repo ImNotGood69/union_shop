@@ -51,5 +51,87 @@ void main() {
       expect(find.text('Opening Hours'), findsOneWidget);
       expect(find.text('Contact Us'), findsOneWidget);
     });
+
+    testWidgets('should display all size options', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Check all size chips are present
+      expect(find.text('S'), findsOneWidget);
+      expect(find.text('M'), findsOneWidget);
+      expect(find.text('L'), findsOneWidget);
+      expect(find.text('XL'), findsOneWidget);
+    });
+
+    testWidgets('should allow size selection', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Find and tap the L size chip
+      final lChip = find.widgetWithText(ChoiceChip, 'L');
+      expect(lChip, findsOneWidget);
+
+      await tester.tap(lChip);
+      await tester.pumpAndSettle();
+
+      // Size should be selectable (no errors thrown)
+      expect(lChip, findsOneWidget);
+    });
+
+    testWidgets('should display action buttons', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Check for Add to cart and Buy now buttons
+      expect(find.text('Add to cart'), findsOneWidget);
+      expect(find.text('Buy now'), findsOneWidget);
+    });
+
+    testWidgets('should add item to cart when button pressed', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Scroll to make button visible
+      await tester.scrollUntilVisible(
+        find.text('Add to cart'),
+        100,
+        scrollable: find.byType(Scrollable).first,
+      );
+
+      // Tap the Add to cart button
+      final addButton = find.text('Add to cart');
+      expect(addButton, findsOneWidget);
+
+      await tester.tap(addButton);
+      await tester.pumpAndSettle();
+
+      // Check for success snackbar (partial match)
+      expect(find.textContaining('Added to cart'), findsOneWidget);
+    });
+
+    testWidgets('should display quantity selector with dropdown',
+        (tester) async {
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Check quantity label
+      expect(find.text('Quantity'), findsOneWidget);
+
+      // TextField and dropdown should be present
+      expect(find.byType(TextField), findsWidgets);
+      expect(find.byType(DropdownButton<int>), findsOneWidget);
+    });
+
+    testWidgets('should display product description section', (tester) async {
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Check description heading and text
+      expect(find.text('Description'), findsOneWidget);
+      expect(
+        find.textContaining('This is a placeholder description'),
+        findsOneWidget,
+      );
+    });
   });
 }
