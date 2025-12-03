@@ -26,7 +26,7 @@ class _SignInPageState extends State<SignInPage> {
       const SnackBar(content: Text('Signed in successfully')),
     );
     Future.delayed(const Duration(milliseconds: 300), () {
-      if (Navigator.canPop(context)) Navigator.pop(context);
+      if (mounted && Navigator.canPop(context)) Navigator.pop(context);
     });
   }
 
