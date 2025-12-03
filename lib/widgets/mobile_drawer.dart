@@ -126,7 +126,7 @@ class MobileDrawer extends StatelessWidget {
                           top: 0,
                           child: Container(
                             padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: brandPurple,
                               shape: BoxShape.circle,
                             ),

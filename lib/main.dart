@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             child: Container(
-                                color: Colors.black.withOpacity(0.55)),
+                                color: Colors.black.withValues(alpha: 0.55)),
                           ),
                         ),
                         const Positioned(
@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             child: Container(
-                                color: Colors.black.withOpacity(0.45)),
+                                color: Colors.black.withValues(alpha: 0.45)),
                           ),
                         ),
                         Center(
@@ -250,11 +250,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           customBorder: const CircleBorder(),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.35),
+                              color: Colors.black.withValues(alpha: 0.35),
                               shape: BoxShape.circle,
                             ),
                             padding: const EdgeInsets.all(8),
-                            child: const Icon(Icons.arrow_back_ios,
+                            child: const Icon(Icons.arrow_forward_ios,
                                 color: Colors.white, size: 16),
                           ),
                         ),
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           customBorder: const CircleBorder(),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.35),
+                              color: Colors.black.withValues(alpha: 0.35),
                               shape: BoxShape.circle,
                             ),
                             padding: const EdgeInsets.all(8),

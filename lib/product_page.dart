@@ -102,20 +102,22 @@ class _ProductPageState extends State<ProductPage> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.search,
-                              size: 20, color: Colors.grey),
-                          onPressed: () async {
-                            final Product? selected =
-                                await showSearch<Product?>(
-                              context: context,
-                              delegate: ProductSearchDelegate(allProducts),
-                            );
-                            if (selected != null) {
-                              Navigator.pushNamed(context, '/product',
-                                  arguments: selected);
-                            }
-                          },
+                        Builder(
+                          builder: (builderContext) => IconButton(
+                            icon: const Icon(Icons.search,
+                                size: 20, color: Colors.grey),
+                            onPressed: () async {
+                              final Product? selected =
+                                  await showSearch<Product?>(
+                                context: builderContext,
+                                delegate: ProductSearchDelegate(allProducts),
+                              );
+                              if (builderContext.mounted && selected != null) {
+                                Navigator.pushNamed(builderContext, '/product',
+                                    arguments: selected);
+                              }
+                            },
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.person_outline,
