@@ -184,3 +184,6 @@ on_sale_products.dart if not present.
 product_search.dart to use allProducts.
 header_bar.dart to instantiate the delegate with combined data and navigate on selection.
 Please implement the above with minimal, focused diffs and keep code style consistent with the project.
+
+when i run the code, a message pops up saying:
+you are using an unsupported command-line flag: --no-sandbox. This poses stability and security risks. how do i fix this from popping up
