@@ -82,9 +82,9 @@ void main() {
       await tester.tap(find.text('A-Z').last);
       await tester.pumpAndSettle();
 
-      // Get all collection titles in order
+      // Verify all cards are still present after sorting
       final cardFinder = find.byType(Card);
-      final cards = tester.widgetList<Card>(cardFinder).toList();
+      expect(cardFinder, findsAtLeastNWidgets(4));
 
       // First card should have "Autumn Favourites" (starts with A)
       expect(find.text('Autumn Favourites'), findsOneWidget);

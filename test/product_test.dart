@@ -67,9 +67,13 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // Find and tap the L size chip
+      // Find and ensure the L size chip is visible
       final lChip = find.widgetWithText(ChoiceChip, 'L');
       expect(lChip, findsOneWidget);
+
+      // Ensure the chip is visible before tapping
+      await tester.ensureVisible(lChip);
+      await tester.pumpAndSettle();
 
       await tester.tap(lChip);
       await tester.pumpAndSettle();
