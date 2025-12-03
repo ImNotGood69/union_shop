@@ -187,3 +187,5 @@ Please implement the above with minimal, focused diffs and keep code style consi
 
 when i run the code, a message pops up saying:
 you are using an unsupported command-line flag: --no-sandbox. This poses stability and security risks. how do i fix this from popping up
+
+generate me some tests for the print shack. ensure that they all work
